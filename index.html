@@ -76,8 +76,11 @@
 
     <section id="why-lfm">
       <h2>So can we use LFM models to create our own Jev-like models?</h2>
-      <p>Our Qwen models are distilled models. LiquidAI LFM models are built for embedded edge use cases, so they can take advantage of wider knowledge.</p>
+      <p>Smaller Qwen models (under 8B?) are distilled models. LiquidAI LFM models are in opposite built for embedded edge use cases, so they can take advantage of wider knowledge.</p>
       <p>They are small enough so we can retrain them on 4070 / 4090 hardware, so a reasonably equipped PC gamer can experiment with them.</p>
+      <p>Rumor corner: the unofficial probing of Jev puts it in the sparse MoE camp, with latency that fits roughly a 10B-class mixture of experts rather than a dense frontier model (see the <a href="#architecture">architecture speculations</a>). If that is the shape of the real thing, the closest we can get today on the open side is <a href="https://huggingface.co/LiquidAI/LFM2.5-8B-A1B">LFM2.5-8B-A1B</a>: an edge-optimized 8.3 billion parameter Mixture-of-Experts (MoE) hybrid model by Liquid AI that activates only about 1.5 billion parameters per token for fast on-device inference. Same MoE + GQA + short-conv family as the dense LFM2.5 bases we already fine-tune, 38T training tokens, 128K context, and a base checkpoint published for exactly this kind of repurposing.</p>
+      <p>So yes, within the limits of what is public: it is the right size class, the right sparse shape, and the right edge deployment story to stand in for a rumored Jev backbone. What it does not ship with is the System One part: no RLCD, no calibrated decision training, no letter-logit readout. That is still our job, the same Selectia recipe, just pointed at the MoE base instead of the dense 2.6B. The catch is hardware: 1.5B active means it already runs anywhere (253 tok/s on an M5 Max, under 6 GB), but a full fine-tune still stores 8.3B of weights plus optimizer state, so training wants a 24 GB card or a LoRA while inference is laptop-friendly.</p>
+      <p>See also: <a href="https://huggingface.co/LiquidAI/LFM2.5-8B-A1B">LFM2.5-8B-A1B (Hugging Face)</a> and <a href="https://www.liquid.ai/blog/lfm2-5-8b-a1b">LFM2.5-8B-A1B release (liquid.ai)</a>.</p>
       <p>For repo see: <a href="https://github.com/AISidesKicks/selectia">github.com AISidesKicks selectia</a>.</p>
     </section>
 
