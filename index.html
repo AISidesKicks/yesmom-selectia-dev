@@ -12,6 +12,7 @@
     <a class="site-title" href="#top">Selectia - build your own Jev</a>
     <nav aria-label="Sections">
       <a href="#intro">Intro</a>
+      <a href="#yesmom">YESMOM</a>
       <a href="#decision-api">Decision API</a>
       <a href="#lfm">LFM 2.5</a>
       <a href="#why-lfm">Why LFM</a>
@@ -30,11 +31,13 @@
       <h2>Intro</h2>
       <p>Some time ago I needed to steer an LLM in AI Harness to fix 3D models in code, or to start a 3D tool (takes ages) and edit it there.</p>
       <p>So I was trying to create a YESMOM API with just a YES / NO logit, in <a href="https://github.com/nokia-applied-research/AnyJev">AnyJev</a> style.</p>
-      <p>The trick is simple: do not ask the model to generate "yes" or "no", read the logits for those two tokens at a fixed answer slot and turn their ratio into a calibrated probability. One forward pass, no decoding, and the answer cannot wander outside yes or no.</p>
-      <p>YESMOM is that idea kept deliberately tiny. It runs on the 230M and 350M LFM2.5 bases (both under 500M), accepts only Noul yes/no questions, and never carries Choice, Score or a 255-wide label table. Mixing broader decision types into a 230M model would dilute the binary calibration that is the whole product, so the narrow head is a feature, not a missing piece.</p>
-      <p>What it is for: cheap on-device gates. Policy checks, safety, entailment, answerability, a form-fill skip - a verification is a much smaller function than routing or rubric scoring, so it fits in 3-4 GB of VRAM and trains on one RTX 4070.</p>
-      <p>Trained on 38.9M tokens of class-balanced Noul data (279,032 rows, half yes, half no): yesmom-230m in about 35 minutes, yesmom-350m in about 47. The two gates that matter both improved with size on thousands of items each: abstain 0.720 to 0.841, off-topic 0.673 to 0.838. On JevBench's 74 public Noul items accuracy is within noise (plus or minus 0.11), but ECE more than halves against the own bases (0.383 to 0.179 for the 230M, 0.221 to 0.151 for the 350M). The runtime enforces the contract: a model trained with the yesmom flag returns P(yes) and rejects Choice and Score questions outright.</p>
-      <p>From that binary head the rest of Selectia grew: the same readout generalized from two tokens to the full typed Decision API (Choice, Noul, Score) on the 1.2B and 2.6B bases. For repo see: <a href="https://github.com/AISidesKicks/selectia">github.com AISidesKicks selectia</a>.</p>
+    </section>
+
+    <section id="yesmom">
+      <h2>YESMOM</h2>
+      <p>The first thing that actually worked was YESMOM: one state, one yes/no question, and a number you can trust. Instead of hoping the model writes "yes" or "no", you read the logits for those two tokens at a fixed answer slot and turn their ratio into a probability. The model never generates anything, so the answer cannot wander off.</p>
+      <p>It stayed deliberately small: only the 230M and 350M LFM2.5 bases, only Noul yes/no questions, no Choice, no Score, no wide label table. That narrowness is the point. A binary gate is a much smaller function than routing or rubric scoring, so the model fits in a few GB of VRAM and trains on a single RTX 4070, which means a reasonably equipped PC can own one.</p>
+      <p>What is it for? Cheap on-device gates: policy checks, safety, entailment, answerability, a form-fill skip. Ask "does this need a human?", get P(yes), move on. Training runs and benchmark numbers live in the Selectia Decision API section; this page is yesmom.selectia.dev because this small gate was the start of the whole thing.</p>
     </section>
 
     <section id="decision-api">
@@ -50,6 +53,7 @@
       <p>How the readout works: every question gets an answer slot like "... Answer 2: (", the hidden state at that slot is projected onto the lm_head rows of the single-token option labels, invalid options are masked to -inf before the softmax, and a fitted temperature from selectia_config.json is the calibration control. Because nothing is generated, all N questions cost one forward pass and question order cannot change any answer.</p>
       <p>Answers come back typed and normalized: choice plus confidence, certainty and a full probabilities map; score plus the legend; noul as P(yes). Two shapes of model serve it: full typed decisions on the 2.6B / 1.2B (up to 255 labels), and YESMOM on the 350M / 230M (Noul only, rejects everything else).</p>
       <p>Two consequences worth knowing: each option label must be a single token in the tokenizer (all four LFM2.5 tokenizers supply the full 255), and these are full fine-tunes, not prompted general models with a grammar constraint.</p>
+      <p>YESMOM, the technical part: trained on 38.9M tokens of class-balanced Noul data (279,032 rows, half yes / half no), yesmom-230m in about 35 minutes and yesmom-350m in about 47 on one RTX 4070 at 3-4 GB VRAM. The product gates improved with size on thousands of items each: abstain 0.720 to 0.841, off-topic 0.673 to 0.838. On JevBench's 74 public Noul items accuracy sits within noise (plus or minus 0.11) but ECE more than halves against the own bases (0.383 to 0.179 on the 230M, 0.221 to 0.151 on the 350M). The saved config sets yesmom: true, so the runtime answers with P(yes) and rejects Choice and Score questions outright. From that binary head the rest of Selectia grew: the same readout generalized from two tokens to the full typed Decision API on the 1.2B and 2.6B bases.</p>
     </section>
 
     <section id="lfm">
