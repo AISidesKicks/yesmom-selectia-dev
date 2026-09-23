@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Selectia - build your own Jev</title>
+  <meta name="description" content="Educational notes on building your own Jev-like decision models, from Liquid AI LFM fine-tunes to benchmarks and alternatives.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body id="top">
+  <header class="site-header">
+    <a class="site-title" href="#top">Selectia - build your own Jev</a>
+    <nav aria-label="Sections">
+      <a href="#intro">Intro</a>
+      <a href="#decision-api">Decision API</a>
+      <a href="#lfm">LFM 2.5</a>
+      <a href="#why-lfm">Why LFM</a>
+      <a href="#what-is-jev">What is Jev</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#alternatives">Alternatives</a>
+      <a href="#benchmarks">Benchmarks</a>
+      <a href="#jev-like-llm">Jev-like LLMs</a>
+      <a href="#diffusion">Diffusion</a>
+      <a href="#futures">Futures</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="intro">
+      <h2>Intro</h2>
+      <p>Some time ago I needed to steer an LLM in AI Harness to fix 3D models in code, or to start a 3D tool (takes ages) and edit it there.</p>
+      <p>So I was trying to create a YESMOM API with just a YES / NO logit, in <a href="https://github.com/nokia-applied-research/AnyJev">AnyJev</a> style.</p>
+    </section>
+
+    <section id="decision-api">
+      <h2>Decision API</h2>
+      <p>Selectia is a family of System One-style models fine-tuned from LFM 2.5, designed for one-pass typed decisions with calibrated probabilities. The Decision API (Choice, Noul, Score) is powered by open LLMs. For repo see: <a href="https://github.com/AISidesKicks/selectia">github.com AISidesKicks selectia</a>.</p>
+    </section>
+
+    <section id="lfm">
+      <h2>Liquid AI LFM 2.5 models</h2>
+      <p>They have a hybrid architecture and they are trained on a very large number of tokens in comparison with their weight.</p>
+      <p>Minus - OSS license with a commercial cap.</p>
+    </section>
+
+    <section id="why-lfm">
+      <h2>So can we use LFM models to create our own Jev-like models?</h2>
+      <p>Our Qwen models are distilled models. LiquidAI LFM models are built for embedded edge use cases, so they can take advantage of wider knowledge.</p>
+      <p>They are small enough so we can retrain them on 4070 / 4090 hardware, so a reasonably equipped PC gamer can experiment with them.</p>
+      <p>For repo see: <a href="https://github.com/AISidesKicks/selectia">github.com AISidesKicks selectia</a>.</p>
+    </section>
+
+    <section id="what-is-jev">
+      <h2>What is Jev</h2>
+      <img src="jev-arch.jpeg" alt="Jev architecture diagram">
+      <p>It's not a Decision per se model, it helps you make one (it's like IF but still not 100% predictable) - because it's still too random, so you must decide based on 3 classification types.</p>
+      <p>Jev is still a model, it's still just an AI model!</p>
+      <p>See also: <a href="https://huggingface.co/blog/sora-2/how-to-use-the-jev-ai-model-a-step-by-step-develop">How to use the Jev AI model (Hugging Face)</a>.</p>
+    </section>
+
+    <section id="architecture">
+      <h2>Jev architecture (no official paper yet)</h2>
+      <p><a href="https://archerhume.com/posts/jevs-architecture-unmasked">Jev's architecture unmasked (archerhume.com)</a>.</p>
+    </section>
+
+    <section id="alternatives">
+      <h2>What alternatives we have</h2>
+      <p>From the ML world: BERT-like systems like Layla. From the LLM world: decider.</p>
+      <ul>
+        <li><a href="https://jev.pro/">jev.pro</a></li>
+        <li><a href="https://jev.pro/top-repos/">jev.pro/top-repos</a></li>
+      </ul>
+    </section>
+
+    <section id="benchmarks">
+      <h2>Benchmarks / JevBench</h2>
+      <ul>
+        <li><a href="https://benchmarkheaven.com/jev-models">Jev models on benchmarkheaven.com</a></li>
+        <li><a href="https://www.mindstudio.ai/blog/jev-vs-classic-classifiers-benchmark">Jev vs classic classifiers (mindstudio.ai)</a></li>
+        <li><a href="https://openrouter.ai/blog/insights/jev-vs-claude-opus-5-classification/">Jev vs Claude Opus 5 classification (openrouter.ai)</a></li>
+      </ul>
+    </section>
+
+    <section id="jev-like-llm">
+      <h2>Jev-like systems with LLMs</h2>
+      <ul>
+        <li><a href="https://github.com/Mapika/decider">Mapika/decider</a> (I choose this one)</li>
+        <li>Kev (LoRA): <a href="https://explainx.ai/blog/kev-open-source-jev-clone-qwen35-family-2026">Kev, open-source Jev clone on the Qwen3.5 family</a></li>
+      </ul>
+      <p class="tbd">More to map here (TBD).</p>
+    </section>
+
+    <section id="diffusion">
+      <h2>Diffusions, Gemma style</h2>
+      <ul>
+        <li><a href="https://www.linkedin.com/pulse/how-build-jev-style-classifier-diffusiongemma-vllm-karl-weinmeister-a2aee">How to build a Jev-style classifier with DiffusionGemma + vLLM (LinkedIn)</a></li>
+        <li><a href="https://github.com/razorback16/openjev">openjev (github.com/razorback16)</a></li>
+      </ul>
+    </section>
+
+    <section id="futures">
+      <h2>Futures</h2>
+      <p>Visual Jev: <a href="https://arxiv.org/html/2609.25845v1">arxiv.org/html/2609.25845v1</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      <a href="https://github.com/AISidesKicks/selectia">GitHub repo</a> -
+      <a href="https://github.com/AISidesKicks/selectia/blob/main/LICENSE">Apache 2.0 license</a>
+    </p>
+    <p>yesmom.selectia.dev</p>
+  </footer>
+</body>
+</html>
