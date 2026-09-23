@@ -109,6 +109,17 @@
     <section id="alternatives">
       <h2>What alternatives we have</h2>
       <p>From the ML world: BERT-like systems like Layla. From the LLM world: decider.</p>
+      <p>Zooming out, the high-level solutions (alternative approaches) to "I need typed decisions with probabilities" today:</p>
+      <ul>
+        <li><strong>Buy the original</strong> - <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe's Jev</a>: closed weights, RLCD-trained, fastest route if you only need the API and accept the dependency.</li>
+        <li><strong>Train your own clone</strong> - open fine-tune pipelines on small bases, decider on Qwen3.5 (our pick) or Selectia on LFM2.5: full control and in-house calibration, costs GPU days.</li>
+        <li><strong>Read a frozen model, no training</strong> - SemIf, ruling: options defined per request, logits scored once, optional temperature; cheapest to keep alive, weaker calibration than a real fine-tune.</li>
+        <li><strong>Diffusion readout</strong> - open-jev on DiffusionGemma: denoise a fixed canvas, then read answer logits; a different compute shape, zero training.</li>
+        <li><strong>Tiny scorer heads</strong> - jevlike, NanoJev: educational starters or domain-specific control, not a general routing model.</li>
+        <li><strong>Prompt a frontier LLM anyway</strong> - JSON schema or constrained decoding (TypeSafe ships an adapter that forces other LLMs into the same wire format): you get general intelligence, but generation cost, latency and "confidence" written as text stay your problem.</li>
+        <li><strong>Plain binary gates</strong> - when the decision really is yes/no, a YESMOM-style Noul head or any calibrated yes/no classifier is the whole solution, no Choice table needed.</li>
+      </ul>
+      <p>Maps of the ecosystem:</p>
       <ul>
         <li><a href="https://jev.pro/">jev.pro</a></li>
         <li><a href="https://jev.pro/top-repos/">jev.pro/top-repos</a></li>
