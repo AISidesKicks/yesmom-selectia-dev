@@ -28,9 +28,11 @@
 
   <main>
     <section id="intro">
-      <h2>Intro</h2>
+      <h2>YESMOM is now reborn as Selectia</h2>
       <p>Some time ago I needed to steer an LLM in AI Harness to fix 3D models in code, or to start a 3D tool (takes ages) and edit it there.</p>
       <p>So I was trying to create a YESMOM API with just a YES / NO logit, in <a href="https://github.com/nokia-applied-research/AnyJev">AnyJev</a> style.</p>
+      <p>Then Jev showed up and really expanded that idea. Same trick, much bigger stage: TypeSafe's System One takes a little yes/no logit readout and generalizes it. Instead of two tokens at one slot you get typed questions (Choice, Noul, Score), a probability distribution over whatever options you define, calibrated confidence, and many questions over one shared state in a single pass with no generation. My YESMOM turns out to have been the Noul-only special case sitting inside the full Decision API all along.</p>
+      <p>So YESMOM is reborn as Selectia: the same one-pass, no-generation readout, grown from a binary gate on tiny LFM2.5 bases into a family that does full typed decisions on the 1.2B and 2.6B. The yes/no head did not disappear, it just got company. The small gate's own story lives in the <a href="#yesmom">YESMOM</a> section; the API shape lives in <a href="#decision-api">Decision API</a>.</p>
     </section>
 
     <section id="yesmom">
