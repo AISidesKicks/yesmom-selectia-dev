@@ -30,6 +30,11 @@
       <h2>Intro</h2>
       <p>Some time ago I needed to steer an LLM in AI Harness to fix 3D models in code, or to start a 3D tool (takes ages) and edit it there.</p>
       <p>So I was trying to create a YESMOM API with just a YES / NO logit, in <a href="https://github.com/nokia-applied-research/AnyJev">AnyJev</a> style.</p>
+      <p>The trick is simple: do not ask the model to generate "yes" or "no", read the logits for those two tokens at a fixed answer slot and turn their ratio into a calibrated probability. One forward pass, no decoding, and the answer cannot wander outside yes or no.</p>
+      <p>YESMOM is that idea kept deliberately tiny. It runs on the 230M and 350M LFM2.5 bases (both under 500M), accepts only Noul yes/no questions, and never carries Choice, Score or a 255-wide label table. Mixing broader decision types into a 230M model would dilute the binary calibration that is the whole product, so the narrow head is a feature, not a missing piece.</p>
+      <p>What it is for: cheap on-device gates. Policy checks, safety, entailment, answerability, a form-fill skip - a verification is a much smaller function than routing or rubric scoring, so it fits in 3-4 GB of VRAM and trains on one RTX 4070.</p>
+      <p>Trained on 38.9M tokens of class-balanced Noul data (279,032 rows, half yes, half no): yesmom-230m in about 35 minutes, yesmom-350m in about 47. The two gates that matter both improved with size on thousands of items each: abstain 0.720 to 0.841, off-topic 0.673 to 0.838. On JevBench's 74 public Noul items accuracy is within noise (plus or minus 0.11), but ECE more than halves against the own bases (0.383 to 0.179 for the 230M, 0.221 to 0.151 for the 350M). The runtime enforces the contract: a model trained with the yesmom flag returns P(yes) and rejects Choice and Score questions outright.</p>
+      <p>From that binary head the rest of Selectia grew: the same readout generalized from two tokens to the full typed Decision API (Choice, Noul, Score) on the 1.2B and 2.6B bases. For repo see: <a href="https://github.com/AISidesKicks/selectia">github.com AISidesKicks selectia</a>.</p>
     </section>
 
     <section id="decision-api">
