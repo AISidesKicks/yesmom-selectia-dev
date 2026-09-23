@@ -83,19 +83,23 @@
 
     <section id="jev-like-llm">
       <h2>Jev-like systems with LLMs</h2>
-      <ul>
-        <li><a href="https://github.com/Mapika/decider">Mapika/decider</a> (I choose this one)</li>
-        <li>Kev (LoRA): <a href="https://explainx.ai/blog/kev-open-source-jev-clone-qwen35-family-2026">Kev, open-source Jev clone on the Qwen3.5 family</a></li>
-      </ul>
+      <p>Good map of the September clone wave: <a href="https://note.com/zephel01/n/ne9a2c037e513?hl=en">I read 7 clones of Jev (note.com)</a>. Short version below, each one next to decider. BERT-style encoder clones are left out on purpose.</p>
+      <p><strong>decider</strong> - <a href="https://github.com/Mapika/decider">Mapika/decider</a> (I choose this one) - family of Qwen3.5 fine-tunes (0.8B up to 35B MoE) trained on ~95 public decision datasets plus labels from a local 27B teacher, nothing distilled from Jev. One forward pass reads letter logits per question, serves TypeSafe's wire format, and the 2B got a calibration RL stage. It is the most complete "train your own" pipeline of the group; on JevBench the 35B sits mid-table because cost and calibration drag the geometric mean, same weak spots as the rest.</p>
+      <p><strong>Kev</strong> - <a href="https://github.com/jaredpalmer/kev">jaredpalmer/kev</a> - small Qwen3.5 family (0.8B/4B/9B) with LoRA plus a pointer head and the only serious <strong>question isolation</strong> (block-causal mask, questions cannot see each other). Trained on a public ~10k-example suite with per-checkpoint temperature; 9B hits 0.852 on new sources vs Jev 0.857. vs decider: narrower data and no RL stage, but cleaner architecture fidelity to Archer Hume's writeup and a polished playground; decider wins on breadth and open training code.</p>
+      <p><strong>SemIf</strong> - <a href="https://github.com/TheoLeeCJ/SemIf">TheoLeeCJ/SemIf</a> - <strong>no training</strong>: frozen Qwen3.5-4B (or smaller/bigger) reads option logits at request time, criteria defined per call, shared state prefetched once. JevBench #2 overall, but calibration (72.6) still well under Jev (82.7). vs decider: zero recipe to maintain and trivial to run, where decider ships a whole mixture + server; same "no generation" trick, opposite end of the effort spectrum.</p>
+      <p><strong>Bespoke Nimble</strong> - <a href="https://github.com/bespokelabsai/nimble">bespokelabsai/nimble</a> - Qwen3.5-9B + LoRA trained on only 2,676 <strong>contrastive pairs</strong> (near-identical examples, one fact flips the label) plus a fitted temperature. Scores 90.1% on its own 324-example holdout vs Jev 93.2%. vs decider: tiny but carefully curated data instead of decider's million-example epoch; great data-curation recipe, narrow domains, ~18 GB to run.</p>
+      <p><strong>ruling</strong> - <a href="https://github.com/bradAGI/ruling">bradAGI/ruling</a> - default is <strong>no training</strong>: any open chat model, state encoded once, option-letter logits averaged over 3 cyclic orderings to kill position bias, optional LoRA + cascade (can even escalate to typesafe:jev-latest). On TypeSafe's 102 rows the 35B scores 0.892 vs Jev 0.882 (difference not significant). vs decider: debiases after the read instead of training calibration in; Mac/MLX-first, one request at a time.</p>
+      <p><strong>jevlike</strong> - <a href="https://github.com/vinnylarouge/jevlike">vinnylarouge/jevlike</a> - research starter: option-attention scorer over byte embeddings or a frozen encoder, not a full LLM fine-tune; ~98% on synthetic menus, 26-29% on Wikispeedia vs ~8% controls. Author says "research starter, not a copy of Jev". vs decider: teaches the readout idea cheaply, nowhere near production accuracy; the jevbetter follow-up trades ~115x throughput for better calibration.</p>
+      <p><strong>NanoJev</strong> - <a href="https://github.com/TianyuCodings/NanoJev">TianyuCodings/NanoJev</a> - Qwen3-0.6B with decision heads, open weights/data/pipeline, aimed at game and agent control (ViZDoom, maze, snake) with dynamic 2-255 candidates; beats Jev on some game tasks. vs decider: domain-specific control decisions rather than general judgment; smaller, task-tuned, not a Jev replacement for text routing.</p>
       <p class="tbd">More to map here (TBD).</p>
     </section>
 
     <section id="diffusion">
       <h2>Diffusions, Gemma style</h2>
-      <ul>
-        <li><a href="https://www.linkedin.com/pulse/how-build-jev-style-classifier-diffusiongemma-vllm-karl-weinmeister-a2aee">How to build a Jev-style classifier with DiffusionGemma + vLLM (LinkedIn)</a></li>
-        <li><a href="https://github.com/razorback16/openjev">openjev (github.com/razorback16)</a></li>
-      </ul>
+      <p>Same survey also separates the diffusion clones properly: <a href="https://note.com/zephel01/n/ne9a2c037e513?hl=en">note.com clone review</a>. Two real projects, both zero-training on DiffusionGemma - different bet from decider's trained causal models.</p>
+      <p><strong>JoshuaSP/open-jev</strong> - <a href="https://github.com/JoshuaSP/open-jev">JoshuaSP/open-jev</a> - DiffusionGemma-26B denoises a fixed JSON canvas, then final logits pick allowed answer tokens; no training. On 337 public Jev questions: 86.1% (1 step) / 87.8% (2 steps) vs saved Jev 90.8%, with grouped 2-step ~4.85x faster / ~79% cheaper than naive per-question runs. vs decider: diffusion readout instead of one-pass letter logits, solid public-set accuracy, probabilities explicitly uncalibrated.</p>
+      <p><strong>razorback16/openjev</strong> - <a href="https://github.com/razorback16/openjev">razorback16/openjev</a> - Jev-wire-compatible server on DiffusionGemma NVFP4 via vLLM (PR #57250) or MLX on Mac; adds images, steps, samples, think; TypeSafe SDK works unchanged; throughput numbers (up to ~57 req/s) but no published accuracy table. Apache-2.0. vs decider: infra/serving play around a diffusion backbone vs decider's trained weights; both drop into the same System One API.</p>
+      <p>Related how-to: <a href="https://www.linkedin.com/pulse/how-build-jev-style-classifier-diffusiongemma-vllm-karl-weinmeister-a2aee">How to build a Jev-style classifier with DiffusionGemma + vLLM (LinkedIn)</a>.</p>
     </section>
 
     <section id="futures">
