@@ -38,8 +38,18 @@
     </section>
 
     <section id="decision-api">
-      <h2>Decision API</h2>
-      <p>Selectia is a family of System One-style models fine-tuned from LFM 2.5, designed for one-pass typed decisions with calibrated probabilities. The Decision API (Choice, Noul, Score) is powered by open LLMs. For repo see: <a href="https://github.com/AISidesKicks/selectia">github.com AISidesKicks selectia</a>.</p>
+      <h2>Selectia Decision API</h2>
+      <p>Selectia is a family of System One-style models fine-tuned from LFM 2.5, designed for one-pass typed decisions with calibrated probabilities. The Decision API (Choice, Noul, Score) is powered by open LLMs. For repo see: <a href="https://github.com/AISidesKicks/selectia">github.com AISidesKicks/selectia</a>.</p>
+      <p>You give it a <strong>state</strong> (any text or JSON) and a set of <strong>typed questions</strong>; one forward pass later you get a probability distribution per question over its own options. No decoding, no parsing, no generated text, and no answer outside the options you defined.</p>
+      <p>The three question types, exactly the System One primitives:</p>
+      <ul>
+        <li><strong>Choice</strong> - options come from the criteria keys at request time, rendered as narrow (A)..(J) letters or wide single-token labels up to 255; a null description renders as a bare label.</li>
+        <li><strong>Score</strong> - 2 to 10 ordered levels, or a numbered legend; the full models turn on isolated_levels, so each level is scored alone and never sees its own number or its neighbours, and fit_mass tells you when no level, or several, fit.</li>
+        <li><strong>Noul</strong> - the yes/no head YESMOM uses, returns P(yes); criteria are optional.</li>
+      </ul>
+      <p>How the readout works: every question gets an answer slot like "... Answer 2: (", the hidden state at that slot is projected onto the lm_head rows of the single-token option labels, invalid options are masked to -inf before the softmax, and a fitted temperature from selectia_config.json is the calibration control. Because nothing is generated, all N questions cost one forward pass and question order cannot change any answer.</p>
+      <p>Answers come back typed and normalized: choice plus confidence, certainty and a full probabilities map; score plus the legend; noul as P(yes). Two shapes of model serve it: full typed decisions on the 2.6B / 1.2B (up to 255 labels), and YESMOM on the 350M / 230M (Noul only, rejects everything else).</p>
+      <p>Two consequences worth knowing: each option label must be a single token in the tokenizer (all four LFM2.5 tokenizers supply the full 255), and these are full fine-tunes, not prompted general models with a grammar constraint.</p>
     </section>
 
     <section id="lfm">
