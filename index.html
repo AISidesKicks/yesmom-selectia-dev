@@ -113,6 +113,7 @@
       <p>From the ML world: BERT-like systems like Layla. From the LLM world: decider.</p>
       <p>Zooming out, the high-level solutions (alternative approaches) to "I need typed decisions with probabilities" today:</p>
       <ul>
+        <li><strong>Multi-label BERT style</strong> - Layla: classic encoder classifiers, one sigmoid head per label, cheap and boring; no generation, but also no shared-state multi-question readout, so you wire one classifier per decision yourself.</li>
         <li><strong>Buy the original</strong> - <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe's Jev</a>: closed weights, RLCD-trained, fastest route if you only need the API and accept the dependency.</li>
         <li><strong>Train your own clone</strong> - open fine-tune pipelines on small bases, decider on Qwen3.5 (our pick) or Selectia on LFM2.5: full control and in-house calibration, costs GPU days.</li>
         <li><strong>Read a frozen model, no training</strong> - SemIf, ruling: options defined per request, logits scored once, optional temperature; cheapest to keep alive, weaker calibration than a real fine-tune.</li>
