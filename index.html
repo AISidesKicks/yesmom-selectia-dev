@@ -55,7 +55,7 @@
     <section id="lfm">
       <h2>Liquid AI LFM 2.5 models</h2>
       <p>They have a hybrid architecture and they are trained on a very large number of tokens in comparison with their weight.</p>
-      <p>The hybrid part is concrete: every layer block mixes short double-gated convolutions with plain GQA attention (the 2.6B model is 30 layers, 22 conv + 8 attention), which is why decode stays fast on CPU with a small memory footprint.</p>
+      <p>The hybrid part is concrete: every layer block mixes short double-gated convolutions with plain GQA attention (the 2.6B model is 30 layers, 22 conv + 8 attention), which is why decode stays fast on CPU with a small memory footprint, and on GPU too: the 2.6B reaches almost 15K output tokens per second at high concurrency on a single H100, about 1.3B tokens per day.</p>
       <p>Training scale matches the claim: pretraining went from 10T to 28T tokens for the 1.2B family, the 2.6B checkpoint alone got 34T tokens, and post-training adds SFT rounds plus agentic reinforcement learning run inside real agent harnesses.</p>
       <p>It is a whole edge family, not one size: 230M / 350M / 1.2B / 2.6B text models, an 8B-A1B MoE, plus VL, audio, encoder and retriever variants, with 128K context and 16 languages on the bigger text models.</p>
       <p>Selectia fine-tunes exactly four of them: full typed decisions on the 2.6B and 1.2B, YESMOM (Noul only) on the 350M and 230M. Pretraining budget, vocabulary size and context window per base:</p>
