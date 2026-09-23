@@ -45,7 +45,7 @@
       <p>It is a whole edge family, not one size: 230M / 350M / 1.2B / 2.6B text models, an 8B-A1B MoE, plus VL, audio, encoder and retriever variants, with 128K context and 16 languages on the bigger text models.</p>
       <p>Selectia fine-tunes exactly four of them: full typed decisions on the 2.6B and 1.2B, YESMOM (Noul only) on the 350M and 230M. Pretraining budget, vocabulary size and context window per base:</p>
       <ul>
-        <li><strong>LFM2.5-2.6B-Base</strong> - 34T training tokens, vocabulary 128,000, context window 131,072 tokens (128K)</li>
+        <li><strong>LFM2.5-2.6B-Base</strong> - 34T training tokens, vocabulary 128,000, context window 131,072 tokens (128K) on the model card (config says max_position_embeddings 128,000); the long length comes from a dedicated mid-training context-extension phase, the LFM2 predecessor shipped 32K, and rope stays type "default" so nothing is stretched at inference time</li>
         <li><strong>LFM2.5-1.2B-Base</strong> - 28T training tokens, vocabulary 65,536, context window 32,768 tokens</li>
         <li><strong>LFM2.5-350M-Base</strong> - 28T training tokens, vocabulary 65,536, context window 32,768 tokens</li>
         <li><strong>LFM2.5-230M-Base</strong> - 28T training tokens, vocabulary 65,536, context window 32,768 tokens</li>
