@@ -86,11 +86,16 @@
 
     <section id="benchmarks">
       <h2>Benchmarks / JevBench</h2>
+      <p>The map we use for decision models, plus what our own JevBench runs have taught us so far:</p>
       <ul>
-        <li><a href="https://benchmarkheaven.com/jev-models">Jev models on benchmarkheaven.com</a></li>
+        <li><a href="https://github.com/fstandhartinger/jevbench">JevBench repo (github.com)</a></li>
+        <li><a href="https://benchmarkheaven.com/jev-models">Jev models (benchmarkheaven.com)</a></li>
         <li><a href="https://www.mindstudio.ai/blog/jev-vs-classic-classifiers-benchmark">Jev vs classic classifiers (mindstudio.ai)</a></li>
         <li><a href="https://openrouter.ai/blog/insights/jev-vs-claude-opus-5-classification/">Jev vs Claude Opus 5 classification (openrouter.ai)</a></li>
       </ul>
+      <p><strong>Lesson 1: accuracy and calibration are different products.</strong> Our 2.6B base beat the 1.2B on JevBench public accuracy (0.541 vs 0.338) yet was worse calibrated on the hard tier (ECE 0.316 vs 0.210), so it is confidently wrong more often. One fitted temperature per checkpoint, around 2.3 to 2.5 on every base, cut ECE 2.5x to 3x without touching a single weight. A leaderboard number alone never tells you whether you can trust the probability that comes with it.</p>
+      <p><strong>Lesson 2: more training is not automatically better calibration.</strong> The 55 minute teacher-only run doubled JevBench accuracy (0.338 to 0.628) but pushed the hard tier deeper into confident wrongness (ECE 0.210 to 0.343). Only the full 695,795 example mixture fixed it: overall ECE landed at 0.113, hard Brier matched the base again, and the fitted temperature fell from 2.50 to 1.55, which says the overconfidence was mostly gone. The held-out calibration gate in the plan earned its keep there.</p>
+      <p><strong>Lesson 3: some tasks are shape-limited, not size-limited, and small slices are noise.</strong> The easy tier saturates at 1.000 after a short run, so it stops discriminating between models; meanwhile paws, tweet_hate, wic and msmarco_rel sit at or below chance for both 230M and 350M identically, which means the prompt shape fails, not the parameter count. JevBench also only publishes 231 of its 534 decisions, and only 74 of those are Noul, so accuracy on that subset moves plus or minus 0.11 and the thousands-item regression gates are where the real signal lives.</p>
     </section>
 
     <section id="jev-like-llm">
