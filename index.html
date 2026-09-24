@@ -23,6 +23,7 @@
       <a href="#benchmarks">Benchmarks</a>
       <a href="#jev-like-llm">Jev-like LLMs</a>
       <a href="#diffusion">Diffusion</a>
+      <a href="#inspiro">Inspiro</a>
       <a href="#futures">Futures</a>
     </nav>
   </header>
@@ -171,6 +172,44 @@
       <p><strong>JoshuaSP/open-jev</strong> - <a href="https://github.com/JoshuaSP/open-jev">JoshuaSP/open-jev</a> - DiffusionGemma-26B denoises a fixed JSON canvas, then final logits pick allowed answer tokens; no training. On 337 public Jev questions: 86.1% (1 step) / 87.8% (2 steps) vs saved Jev 90.8%, with grouped 2-step ~4.85x faster / ~79% cheaper than naive per-question runs. vs decider: diffusion readout instead of one-pass letter logits, solid public-set accuracy, probabilities explicitly uncalibrated.</p>
       <p><strong>razorback16/openjev</strong> - <a href="https://github.com/razorback16/openjev">razorback16/openjev</a> - Jev-wire-compatible server on DiffusionGemma NVFP4 via vLLM (PR #57250) or MLX on Mac; adds images, steps, samples, think; TypeSafe SDK works unchanged; throughput numbers (up to ~57 req/s) but no published accuracy table. Apache-2.0. vs decider: infra/serving play around a diffusion backbone vs decider's trained weights; both drop into the same System One API.</p>
       <p>Related how-to: <a href="https://www.linkedin.com/pulse/how-build-jev-style-classifier-diffusiongemma-vllm-karl-weinmeister-a2aee">How to build a Jev-style classifier with DiffusionGemma + vLLM (LinkedIn)</a>.</p>
+    </section>
+
+    <section id="inspiro">
+      <h2>Inspiro</h2>
+      <p>Videos that inspired this page:</p>
+
+      <figure class="video">
+        <figcaption class="video-title">System 1 vs System 2 Explained
+          <svg class="yt-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+        </figcaption>
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/S4efgdWLvIc" title="System 1 vs System 2 Explained" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </figure>
+
+      <figure class="video">
+        <figcaption class="video-title">Every Jev Concept Explained (use with Claude)
+          <svg class="yt-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+        </figcaption>
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/D-Z5HnLW_ho" title="Every Jev Concept Explained (use with Claude)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </figure>
+
+      <figure class="video">
+        <figcaption class="video-title">Build Your Own Jev With Claude Opus 5.5
+          <svg class="yt-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+        </figcaption>
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/z8My0bX2-ZU" title="Build Your Own Jev With Claude Opus 5.5" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </figure>
     </section>
 
     <section id="futures">
